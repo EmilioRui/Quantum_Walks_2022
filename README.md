@@ -12,3 +12,8 @@ File QWCTvsQWDT : Un confronto esplicito dei due andamenti in cui si evince come
 File QW_Continuos_Time_Ring: Quantum Walk su un grafo ad Anello.
 
 File QWCT_random_graph.m : Genera un grafo random, e simula su di esso un quantum walk a tempo continuo
+
+TO DO:
+1- capire come funzionano i DTQW per il caso di una linea finita. In particolare prova a capire come mai l'evoluzione è non unitaria.
+2- Aggiungere la possibilità di scegliere se registrare un video o meno/fatto
+3- Aggiungere un menu di selezione per poter variare i vari parametri in modo semplice

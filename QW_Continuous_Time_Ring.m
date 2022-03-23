@@ -5,6 +5,7 @@ N = 100;
 n_sample = 200;
 dt = 2;
 
+rec_video = false;
 %parametri su cui lavorare: gamma ci permette di tunare la velocità di
 %propagazione
 gamma = 0.2;
@@ -56,9 +57,11 @@ f_20.Position = [100 100 1500 800];
 subplot (1,2,2)
 asse_x = [1:N];
 
-video = VideoWriter('Video/QWCT_ring_graph'); % Name it.
-video.FrameRate = 10; % How many frames per second.
-open(video); 
+if rec_video
+    video = VideoWriter('Video/QWCT_ring_graph'); % Name it.
+    video.FrameRate = 10; % How many frames per second.
+    open(video); 
+end
 for ii = 1:n_sample + 1
     subplot (1,2,1)
     bar(asse_x,probabilita(:,ii), 0.3,'red')
@@ -78,12 +81,14 @@ for ii = 1:n_sample + 1
     
     pause(.03)
     %prendiamo il video
-    frame = getframe(gcf); 
-    writeVideo(video, frame);
-
+    if rec_video
+        frame = getframe(gcf); 
+        writeVideo(video, frame);
+    end
 end
-close(video);
-
+if rec_video 
+    close(video);
+end
 %% Andamento del primo e del secondo momento 
 
 %Controllo che il primo momento venga nullo

@@ -7,6 +7,8 @@ clc;clear;close all;
 tic
 
 %% EVOLUZIONE QWDT
+%decidiamo se riprendere i plot o no
+rec_video = false;
 
 n_step_DT = 100;   %numero di evoluzioni discrete
 N = 2*n_step_DT + 3; %serve a garantire l'idealità dell'evoluzione senza subire gli effetti di bordo
@@ -109,7 +111,7 @@ for t = [0:dt:dt*(n_sample_CT-1)]
     primo_momento_CT(ii) = [1:N]*probabilita_CT(:,ii);
     varianza_CT(ii) = [1:N].^2*probabilita_CT(:,ii) - primo_momento_CT(ii).^2;
 end
-
+toc
 
 %% PLOTS
 f_50=figure(50);
@@ -117,10 +119,12 @@ f_50.Position = [100 200 1500 800];
 
 asse_x = [-(N-1)/2:(N-1)/2];
 
+if rec_video
+    video = VideoWriter('Video/QWCTvsQWDT.mkv'); % Name it.
+    video.FrameRate = 10; % How many frames per second.
+    open(video);
+end
 
-video = VideoWriter('Video/QWCTvsQWDT.mkv'); % Name it.
-video.FrameRate = 10; % How many frames per second.
-open(video); 
 jj = 1;
 for ii = 1:n_sample_CT 
 
@@ -155,15 +159,15 @@ for ii = 1:n_sample_CT
     legend( 'Tempo Discreto','Tempo Continuo')
     
     pause(.01)
-    frame = getframe(gcf); 
-    writeVideo(video, frame);
-
-    
-  
+    if rec_video
+        frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
+        writeVideo(video, frame);
+    end
 end
-close (video);
+if rec_video
+    close(video); 
+end
 
-toc
 
 
 

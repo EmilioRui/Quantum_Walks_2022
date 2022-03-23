@@ -2,9 +2,11 @@ clc;clear;
 %% CASO LINEA INFINITA
 % Consideriamo DTQW in cui possiamo trascurare effetti di bordo
 tic
-n_step = 100;   %numero di evoluzioni discrete
+n_step = 1000;   %numero di evoluzioni discrete
 N = 2*n_step + 3; %serve a garantire l'idealità dell'evoluzione senza subire gli effetti di bordo
 
+%decidiamo se riprendere i plot o no
+rec_video = false;
 %CONSIDERIAMO L'UNITARIA DI EVOLUZIONE U = S (I x C) 
 %S vive nello spazio di Hilbert Hw x Hc, C solo in Hc (coin)
 
@@ -64,7 +66,7 @@ toc
 
 %% Andiamo in conclusione a plottare i risultati
 f_1 = figure(1);
-f_1.Position = [100 100 1900 1080];
+f_1.Position = [200 100 1800 800];
 
 asse_x = [-(N-1)/2:(N-1)/2]; %e.g N = 5 l'asse va da -2 a 2
 % even_mask = mod(asse_x,2)==0;
@@ -72,10 +74,11 @@ asse_x = [-(N-1)/2:(N-1)/2]; %e.g N = 5 l'asse va da -2 a 2
 
 %Dopo un numero pari di jump solo i siti pari hanno probabilità non nulle e
 %vicecersa
-
-writerObj = VideoWriter('Video/QWDT_Infinite_line'); % Name it.
-writerObj.FrameRate = 10; % How many frames per second.
-open(writerObj); 
+if rec_video
+    video = VideoWriter('Video/QWDT_Infinite_line'); % Name it.
+    video.FrameRate = 10; % How many frames per second.
+    open(video); 
+end
 for ii = 1:n_step + 1    
     bar(asse_x,probabilita(:,ii), 0.3,'red')
     title (['Distribuzione di Probabilità dopo ' , num2str(ii - 1) , ' step'])
@@ -87,12 +90,14 @@ for ii = 1:n_step + 1
     end
     pause(.01)
     %prendiamo il video
-    frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
-    writeVideo(writerObj, frame);
-
+    if rec_video
+        frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
+        writeVideo(video, frame);
+    end
 end
-close(writerObj); 
-
+if rec_video
+    close(video); 
+end
 
 
 %Controllo che il primo momento venga nullo
